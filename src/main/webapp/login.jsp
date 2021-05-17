@@ -14,6 +14,11 @@ request.getContextPath() + "/";
 <script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
 		$(function (){
+
+			if (window.top!=window){
+				window.top.location= window.location;
+			}
+
 			//页面加载完毕后，将用户文本框中的内容清空
 			$("#loginAct").val("");
 			//在页面加载完毕后，让用户的文本框自动获得焦点
