@@ -1,0 +1,30 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: baize
+  Date: 2021/5/17
+  Time: 17:16
+  To change this template use File | Settings | File Templates.
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<html>
+<head>
+    <title>Title</title>
+    <script type="text/javascript" src="jquery/jquery-1.11.1-min.js"></script>
+    <script type="text/javascript">
+        $.ajax({
+            url:"",
+            data:{
+
+            },
+            type:"",
+            dataType:"",
+            success:function (data){
+
+            }
+        })
+    </script>
+</head>
+<body>
+
+</body>
+</html>

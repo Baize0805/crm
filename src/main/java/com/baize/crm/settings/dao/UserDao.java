@@ -2,6 +2,7 @@ package com.baize.crm.settings.dao;
 
 import com.baize.crm.settings.domain.User;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,4 +17,6 @@ public interface UserDao {
      * @return
      */
     User login(Map<String, String> map);
+
+    List<User> getUserList();
 }
