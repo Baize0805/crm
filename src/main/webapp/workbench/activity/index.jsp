@@ -7,9 +7,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <base href="<%=basePath%>"/>
-    <meta charset="UTF-8">
 
+    <meta charset="UTF-8">
+    <base href="<%=basePath%>"/>
     <link href="jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
     <link href="jquery/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css" type="text/css"
           rel="stylesheet"/>
@@ -92,7 +92,7 @@
                             //添加成功
                             //刷新市场活动信息列表（局部刷新）
                             //清空模态窗口中添加操作的数据
-                            $("#activityAddForm")[0].reset();
+                            //$("#activityAddForm")[0].reset();
 
                             //关闭添加操作的模态窗口
                             $("#createActivityModal").modal("hide");

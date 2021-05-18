@@ -1,6 +1,9 @@
 package com.baize.crm.workbench.service;
 
+import com.baize.crm.vo.PaginationVO;
 import com.baize.crm.workbench.domain.Activity;
+
+import java.util.Map;
 
 /**
  * @Author baize
@@ -9,4 +12,6 @@ import com.baize.crm.workbench.domain.Activity;
  */
 public interface ActivityService {
     boolean save(Activity a);
+
+    PaginationVO pageList(Map<String, Object> map);
 }

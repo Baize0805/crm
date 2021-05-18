@@ -7,6 +7,7 @@ import com.baize.crm.utils.DateTimeUtil;
 import com.baize.crm.utils.PrintJson;
 import com.baize.crm.utils.ServiceFactory;
 import com.baize.crm.utils.UUIDUtil;
+import com.baize.crm.vo.PaginationVO;
 import com.baize.crm.workbench.domain.Activity;
 import com.baize.crm.workbench.service.ActivityService;
 import com.baize.crm.workbench.service.impl.ActivityServiceImpl;
@@ -16,7 +17,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author baize
@@ -43,8 +46,30 @@ public class ActivityController extends HttpServlet {
         String owner = request.getParameter("owner");
         String startDate = request.getParameter("startDate");
         String endDate = request.getParameter("endDate");
-        String pageNo = request.getParameter("pageNo");
-        String pageSize = request.getParameter("pageSize");
+        //页码
+        String pageNoStr = request.getParameter("pageNo");
+        int pageNo = Integer.valueOf(pageNoStr);
+
+        //每页展现的记录数
+        String pageSizeStr = request.getParameter("pageSize");
+        int pageSize = Integer.valueOf(pageSizeStr);
+
+        //计算略过的记录数
+        int skipCount = (pageNo-1)*pageSize;
+
+        Map<String,Object> map = new HashMap<String, Object>();
+        map.put("name",name);
+        map.put("owner",owner);
+        map.put("startDate",startDate);
+        map.put("endDate",endDate);
+        map.put("skipCount",skipCount);
+        map.put("pageSize",pageSize);
+
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+
+        PaginationVO vo = as.pageList(map);
+        PrintJson.printJsonObj(response,vo);
+
     }
 
     private void save(HttpServletRequest request, HttpServletResponse response) {
