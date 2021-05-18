@@ -32,7 +32,19 @@ public class ActivityController extends HttpServlet {
             getUserList(request,response);
         } else if ("/workbench/activity/save.do".equals(path)) {
             save(request,response);
+        }else if ("/workbench/activity/pageList.do".equals(path)) {
+            pageList(request,response);
         }
+    }
+
+    private void pageList(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("进入到查询市场活动信息列表的操作（结合条件查询+分页查询）");
+        String name = request.getParameter("name");
+        String owner = request.getParameter("owner");
+        String startDate = request.getParameter("startDate");
+        String endDate = request.getParameter("endDate");
+        String pageNo = request.getParameter("pageNo");
+        String pageSize = request.getParameter("pageSize");
     }
 
     private void save(HttpServletRequest request, HttpServletResponse response) {

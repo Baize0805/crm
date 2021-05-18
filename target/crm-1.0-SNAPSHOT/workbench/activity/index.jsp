@@ -89,7 +89,8 @@ request.getContextPath() + "/";
 					if (data.success){
 						//添加成功
 						//刷新市场活动信息列表（局部刷新）
-
+						//清空模态窗口中添加操作的数据
+						$("#activityAddForm")[0].reset();
 
 						//关闭添加操作的模态窗口
 						$("#createActivityModal").modal("hide");
@@ -101,7 +102,19 @@ request.getContextPath() + "/";
 			})
 		})
 
+		//页面加载完毕后触发一个方法
+		pageList(1,2);
+
 	});
+	/*
+	* 对于所有的关系型数据库，做前端的分页相关基础组件
+	* 就是pageNo,pageSize
+	* pageNo:页码
+	* pageSize:每页展现的记录数
+	* */
+	function pageList(pageNo,pageSize){
+		alert("刷新操作");
+	}
 	
 </script>
 </head>
@@ -119,7 +132,7 @@ request.getContextPath() + "/";
 				</div>
 				<div class="modal-body">
 				
-					<form class="form-horizontal" role="form">
+					<form id="activityAddForm" class="form-horizontal" role="form">
 					
 						<div class="form-group">
 							<label for="create-marketActivityOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
