@@ -95,14 +95,19 @@
                         if (data.success) {
                             //添加成功
                             //刷新市场活动信息列表（局部刷新）
+                            // pageList(1,2);
+                            pageList(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
+
+
+
                             //清空模态窗口中添加操作的数据
-                            //$("#activityAddForm")[0].reset();
+                            $("#activityAddForm")[0].reset();
 
                             //关闭添加操作的模态窗口
                             $("#createActivityModal").modal("hide");
 
                         } else {
-                            alert("添加市场活动失败！");
+                            alert("修改市场活动失败！");
                         }
 
                     }
@@ -171,7 +176,8 @@
                                  */
                                 if (data.success){
                                     //删除成功后
-                                    pageList(1,2);
+                                    pageList(1,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
+
                                 }else {
                                     alert("删除失败");
                                 }
@@ -230,7 +236,45 @@
                 }
             })
 
+            //为更新按钮绑定事件，执行市场活动修改操作
+            $("#updateBtn").click(function (){
+                $.ajax({
+                    url: "workbench/activity/update.do",
+                    data: {
+                        "id": $.trim($("#edit-id").val()),
+                        "owner": $.trim($("#edit-owner").val()),
+                        "name": $.trim($("#edit-name").val()),
+                        "startDate": $.trim($("#edit-startDate").val()),
+                        "endDate": $.trim($("#edit-endDate").val()),
+                        "cost": $.trim($("#edit-cost").val()),
+                        "description": $.trim($("#edit-description").val()),
 
+                    },
+                    type: "post",
+                    dataType: "json",
+                    success: function (data) {
+                        /*
+                        * data
+                        * 	{""success":true/false}
+                        * */
+                        if (data.success) {
+                            //修改成功
+                            //刷新市场活动信息列表（局部刷新）
+                            pageList($("#activityPage").bs_pagination('getOption', 'currentPage')
+                                ,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
+
+
+
+                            //关闭修改操作的模态窗口
+                            $("#editActivityModal").modal("hide");
+
+                        } else {
+                            alert("添加市场活动失败！");
+                        }
+
+                    }
+                })
+            })
 
 
 
