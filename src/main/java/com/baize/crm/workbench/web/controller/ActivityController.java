@@ -32,12 +32,26 @@ public class ActivityController extends HttpServlet {
         System.out.println("进入到市场活动控制器");
         String path = request.getServletPath();
         if ("/workbench/activity/getUserList.do".equals(path)) {
-            getUserList(request,response);
+            getUserList(request, response);
         } else if ("/workbench/activity/save.do".equals(path)) {
-            save(request,response);
-        }else if ("/workbench/activity/pageList.do".equals(path)) {
-            pageList(request,response);
+            save(request, response);
+        } else if ("/workbench/activity/pageList.do".equals(path)) {
+            pageList(request, response);
+        }else if ("/workbench/activity/delete.do".equals(path)) {
+            delete(request, response);
         }
+    }
+
+    private void delete(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("执行市场活动删除操作");
+
+        String[] ids = request.getParameterValues("id");
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+
+        boolean flag = as.delete(ids);
+
+        PrintJson.printJsonFlag(response,flag);
+
     }
 
     private void pageList(HttpServletRequest request, HttpServletResponse response) {
@@ -55,37 +69,37 @@ public class ActivityController extends HttpServlet {
         int pageSize = Integer.valueOf(pageSizeStr);
 
         //计算略过的记录数
-        int skipCount = (pageNo-1)*pageSize;
+        int skipCount = (pageNo - 1) * pageSize;
 
-        Map<String,Object> map = new HashMap<String, Object>();
-        map.put("name",name);
-        map.put("owner",owner);
-        map.put("startDate",startDate);
-        map.put("endDate",endDate);
-        map.put("skipCount",skipCount);
-        map.put("pageSize",pageSize);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("name", name);
+        map.put("owner", owner);
+        map.put("startDate", startDate);
+        map.put("endDate", endDate);
+        map.put("skipCount", skipCount);
+        map.put("pageSize", pageSize);
 
         ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
 
         PaginationVO vo = as.pageList(map);
-        PrintJson.printJsonObj(response,vo);
+        PrintJson.printJsonObj(response, vo);
 
     }
 
     private void save(HttpServletRequest request, HttpServletResponse response) {
         System.out.println("执行市场活动的添加操作");
 
-         String id = UUIDUtil.getUUID();
-         String owner =request.getParameter("owner");
-         String name =request.getParameter("name");
-         String startDate =request.getParameter("startDate");
-         String endDate =request.getParameter("endDate");
-         String cost =request.getParameter("cost");
-         String description =request.getParameter("description");
-         //创建时间，当前的系统时间
-         String createTime = DateTimeUtil.getSysTime();
-         //创建人，当前登录的用户
-         String createBy = ((User)request.getSession().getAttribute("user")).getName();
+        String id = UUIDUtil.getUUID();
+        String owner = request.getParameter("owner");
+        String name = request.getParameter("name");
+        String startDate = request.getParameter("startDate");
+        String endDate = request.getParameter("endDate");
+        String cost = request.getParameter("cost");
+        String description = request.getParameter("description");
+        //创建时间，当前的系统时间
+        String createTime = DateTimeUtil.getSysTime();
+        //创建人，当前登录的用户
+        String createBy = ((User) request.getSession().getAttribute("user")).getName();
 
         Activity a = new Activity();
         a.setId(id);
@@ -102,7 +116,7 @@ public class ActivityController extends HttpServlet {
 
         boolean flag = as.save(a);
 
-        PrintJson.printJsonFlag(response,flag);
+        PrintJson.printJsonFlag(response, flag);
 
     }
 
@@ -113,8 +127,7 @@ public class ActivityController extends HttpServlet {
 
         List<User> uList = us.getUserList();
 
-        PrintJson.printJsonObj(response,uList);
-
+        PrintJson.printJsonObj(response, uList);
 
 
     }
