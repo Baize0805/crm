@@ -1,5 +1,7 @@
 package com.baize.crm.workbench.service.impl;
 
+import com.baize.crm.settings.dao.UserDao;
+import com.baize.crm.settings.domain.User;
 import com.baize.crm.utils.SqlSessionUtil;
 import com.baize.crm.vo.PaginationVO;
 import com.baize.crm.workbench.dao.ActivityDao;
@@ -7,6 +9,7 @@ import com.baize.crm.workbench.dao.ActivityRemarkDao;
 import com.baize.crm.workbench.domain.Activity;
 import com.baize.crm.workbench.service.ActivityService;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,13 +21,14 @@ import java.util.Map;
 public class ActivityServiceImpl implements ActivityService {
     private ActivityDao activityDao = SqlSessionUtil.getSqlSession().getMapper(ActivityDao.class);
     private ActivityRemarkDao activityRemarkDao = SqlSessionUtil.getSqlSession().getMapper(ActivityRemarkDao.class);
+    private UserDao userDao = SqlSessionUtil.getSqlSession().getMapper(UserDao.class);
 
     @Override
     public boolean save(Activity a) {
         boolean flag = true;
 
         int count = activityDao.save(a);
-        if (count != 1){
+        if (count != 1) {
             flag = false;
         }
 
@@ -52,16 +56,33 @@ public class ActivityServiceImpl implements ActivityService {
         int count1 = activityRemarkDao.getCountByAids(ids);
         //删除备注，返回受影响的条数
         int count2 = activityRemarkDao.deleteByAids(ids);
-        if (count1!=count2){
+        if (count1 != count2) {
             flag = false;
         }
 
         //删除市场活动
         int count3 = activityDao.delete(ids);
-        if (count3 != ids.length){
-            flag= false;
+        if (count3 != ids.length) {
+            flag = false;
         }
 
         return flag;
+    }
+
+    @Override
+    public Map<String, Object> getUserListAndActivity(String id) {
+
+        //取uList
+        List<User> uList = userDao.getUserList();
+
+        //取a
+        Activity a = activityDao.getById(id);
+
+        //将uList和a打包到map中
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("uList",uList);
+        map.put("a",a);
+
+        return map;
     }
 }
