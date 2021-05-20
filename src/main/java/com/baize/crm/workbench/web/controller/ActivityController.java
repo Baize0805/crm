@@ -9,6 +9,7 @@ import com.baize.crm.utils.ServiceFactory;
 import com.baize.crm.utils.UUIDUtil;
 import com.baize.crm.vo.PaginationVO;
 import com.baize.crm.workbench.domain.Activity;
+import com.baize.crm.workbench.domain.ActivityRemark;
 import com.baize.crm.workbench.service.ActivityService;
 import com.baize.crm.workbench.service.impl.ActivityServiceImpl;
 
@@ -45,7 +46,21 @@ public class ActivityController extends HttpServlet {
             update(request, response);
         }else if ("/workbench/activity/detail.do".equals(path)) {
             detail(request, response);
+        }else if ("/workbench/activity/getRemarkListByAid.do".equals(path)) {
+            getRemarkListByAid(request, response);
         }
+    }
+
+    private void getRemarkListByAid(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("根据市场活动的id，来取得备注信息列表");
+        String activityId = request.getParameter("activityId");
+
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+
+        List<ActivityRemark> arList = as.getRemarkListByAid(activityId);
+
+        PrintJson.printJsonObj(response,arList);
+
     }
 
     private void detail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

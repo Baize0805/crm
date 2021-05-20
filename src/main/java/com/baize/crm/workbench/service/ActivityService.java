@@ -2,7 +2,9 @@ package com.baize.crm.workbench.service;
 
 import com.baize.crm.vo.PaginationVO;
 import com.baize.crm.workbench.domain.Activity;
+import com.baize.crm.workbench.domain.ActivityRemark;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,4 +24,6 @@ public interface ActivityService {
     boolean update(Activity a);
 
     Activity detail(String id);
+
+    List<ActivityRemark> getRemarkListByAid(String activityId);
 }
