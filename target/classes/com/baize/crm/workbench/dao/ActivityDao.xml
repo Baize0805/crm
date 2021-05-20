@@ -4,10 +4,30 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.baize.crm.workbench.dao.ActivityDao">
 
-    <update id="update">
-        update tbl_activity set
+    <select id="detail" resultType="Activity">
+        select a.id,
+               u.name as owner,
+               a.name,
+               a.startDate,
+               a.endDate,
+               a.cost,
+               a.description,
+               a.createTime,
+               a.createBy,
+               a.editTime,
+               a.editBy
 
-            owner=#{owner},
+
+        from tbl_activity a
+                 join tbl_user u
+                      on a.owner = u.id
+
+        where a.id = #{id}
+    </select>
+
+    <update id="update">
+        update tbl_activity
+        set owner=#{owner},
             name=#{name},
             startDate=#{startDate},
             endDate=#{endDate},
@@ -16,12 +36,14 @@
             editTime=#{editTime},
             editBy=#{editBy}
 
-        where id=#{id}
+        where id = #{id}
 
     </update>
-    
+
     <select id="getById" resultType="Activity">
-        select * from tbl_activity where id=#{id}
+        select *
+        from tbl_activity
+        where id = #{id}
     </select>
 
     <delete id="delete">
@@ -104,29 +126,24 @@
 
 
     <insert id="save">
-        insert into tbl_activity(
-            id,
-            owner,
-            name,
-            startDate,
-            endDate,
-            cost,
-            description,
-            createTime,
-            createBy
-        )
+        insert into tbl_activity(id,
+                                 owner,
+                                 name,
+                                 startDate,
+                                 endDate,
+                                 cost,
+                                 description,
+                                 createTime,
+                                 createBy)
 
-        values (
-                   #{id},
-                   #{owner},
-                   #{name},
-                   #{startDate},
-                   #{endDate},
-                   #{cost},
-                   #{description},
-                   #{createTime},
-                   #{createBy}
-
-               )
+        values (#{id},
+                #{owner},
+                #{name},
+                #{startDate},
+                #{endDate},
+                #{cost},
+                #{description},
+                #{createTime},
+                #{createBy})
     </insert>
 </mapper>
