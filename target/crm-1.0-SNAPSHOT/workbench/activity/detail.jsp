@@ -64,6 +64,10 @@
                 $(this).children("div").children("div").hide();
             })
 
+            //为保存按钮绑定一个事件
+            $("#saveRemarkBtn").click(function (){
+                
+            })
 
         });
 
@@ -79,7 +83,7 @@
                     var html = "";
 
                     $.each(data, function (i, n) {
-                        html += '<div class="remarkDiv" style="height: 60px;">';
+                        html += '<div id="'+n.id+'" class="remarkDiv" style="height: 60px;">';
                         html += '<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
                         html += '<div style="position: relative; top: -40px; left: 40px;" >';
                         html += '<h5>' + n.noteContent + '</h5>';
@@ -87,7 +91,7 @@
                         html += '<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
                         html += '<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
                         html += '&nbsp;&nbsp;&nbsp;&nbsp;';
-                        html += '<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #FF0000;"></span></a>';
+                        html += '<a class="myHref" href="javascript:void(0);" onclick="deleteRemark(\''+n.id+'\')" ><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #FF0000;"></span></a>';
                         html += '</div>';
                         html += '</div>';
                         html += '</div>';
@@ -97,6 +101,30 @@
 
                 }
             })
+        }
+
+        function deleteRemark(id){
+            // alert(id);
+            $.ajax({
+                url:"workbench/activity/deleteRemark.do",
+                data:{
+                    "id":id
+                },
+                type:"post",
+                dataType:"json",
+                success:function (data){
+                    if (data.success){
+                        // showRemarkList();
+                        $("#"+id).remove();
+
+                    }else {
+                        alert("删除备注失败");
+                    }
+                }
+            })
+
+
+
         }
 
     </script>
@@ -313,7 +341,7 @@
                       placeholder="添加备注..."></textarea>
             <p id="cancelAndSaveBtn" style="position: relative;left: 737px; top: 10px; display: none;">
                 <button id="cancelBtn" type="button" class="btn btn-default">取消</button>
-                <button type="button" class="btn btn-primary">保存</button>
+                <button type="button" class="btn btn-primary" id="saveRemarkBtn">保存</button>
             </p>
         </form>
     </div>
