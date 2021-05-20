@@ -81,8 +81,8 @@ public class ActivityServiceImpl implements ActivityService {
 
         //将uList和a打包到map中
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("uList",uList);
-        map.put("a",a);
+        map.put("uList", uList);
+        map.put("a", a);
 
         return map;
     }
@@ -120,7 +120,18 @@ public class ActivityServiceImpl implements ActivityService {
 
         int count = activityRemarkDao.deleteById(id);
 
-        if (count!=1){
+        if (count != 1) {
+            flag = false;
+        }
+
+        return flag;
+    }
+
+    @Override
+    public boolean saveRemark(ActivityRemark ar) {
+        boolean flag = true;
+        int count = activityRemarkDao.saveRemark(ar);
+        if (count != 1){
             flag = false;
         }
 
