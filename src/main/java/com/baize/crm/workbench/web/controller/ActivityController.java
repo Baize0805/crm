@@ -38,21 +38,54 @@ public class ActivityController extends HttpServlet {
             save(request, response);
         } else if ("/workbench/activity/pageList.do".equals(path)) {
             pageList(request, response);
-        }else if ("/workbench/activity/delete.do".equals(path)) {
+        } else if ("/workbench/activity/delete.do".equals(path)) {
             delete(request, response);
-        }else if ("/workbench/activity/getUserListAndActivity.do".equals(path)) {
+        } else if ("/workbench/activity/getUserListAndActivity.do".equals(path)) {
             getUserListAndActivity(request, response);
-        }else if ("/workbench/activity/update.do".equals(path)) {
+        } else if ("/workbench/activity/update.do".equals(path)) {
             update(request, response);
-        }else if ("/workbench/activity/detail.do".equals(path)) {
+        } else if ("/workbench/activity/detail.do".equals(path)) {
             detail(request, response);
-        }else if ("/workbench/activity/getRemarkListByAid.do".equals(path)) {
+        } else if ("/workbench/activity/getRemarkListByAid.do".equals(path)) {
             getRemarkListByAid(request, response);
-        }else if ("/workbench/activity/deleteRemark.do".equals(path)) {
+        } else if ("/workbench/activity/deleteRemark.do".equals(path)) {
             deleteRemark(request, response);
-        }else if ("/workbench/activity/saveRemark.do".equals(path)) {
+        } else if ("/workbench/activity/saveRemark.do".equals(path)) {
             saveRemark(request, response);
+        } else if ("/workbench/activity/updateRemark.do".equals(path)) {
+            updateRemark(request, response);
         }
+    }
+
+    private void updateRemark(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("执行修改备注的操作");
+
+        String id = request.getParameter("id");
+        String noteContent = request.getParameter("noteContent");
+        String editTime = DateTimeUtil.getSysTime();
+
+        String editBy = ((User) request.getSession().getAttribute("user")).getName();
+
+        String editFlag = "1";
+
+        ActivityRemark ar = new ActivityRemark();
+        ar.setId(id);
+        ar.setNoteContent(noteContent);
+        ar.setEditTime(editTime);
+        ar.setEditBy(editBy);
+        ar.setEditFlag(editFlag);
+
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+
+        boolean flag = as.updateRemark(ar);
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("success", flag);
+        map.put("ar", ar);
+
+        PrintJson.printJsonObj(response, map);
+
+
     }
 
     private void saveRemark(HttpServletRequest request, HttpServletResponse response) {
@@ -64,8 +97,8 @@ public class ActivityController extends HttpServlet {
 
         String createTime = DateTimeUtil.getSysTime();
 
-        String createBy = ((User)request.getSession().getAttribute("user")).getName();
-        String editFlag= "0";
+        String createBy = ((User) request.getSession().getAttribute("user")).getName();
+        String editFlag = "0";
 
         ActivityRemark ar = new ActivityRemark();
         ar.setId(id);
@@ -79,11 +112,11 @@ public class ActivityController extends HttpServlet {
 
         boolean flag = as.saveRemark(ar);
 
-        Map<String,Object> map = new HashMap<String, Object>();
-        map.put("success",flag);
-        map.put("ar",ar);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("success", flag);
+        map.put("ar", ar);
 
-        PrintJson.printJsonObj(response,map);
+        PrintJson.printJsonObj(response, map);
 
     }
 
@@ -95,7 +128,7 @@ public class ActivityController extends HttpServlet {
 
         boolean flag = as.deleteRemark(id);
 
-        PrintJson.printJsonFlag(response,flag);
+        PrintJson.printJsonFlag(response, flag);
 
     }
 
@@ -107,7 +140,7 @@ public class ActivityController extends HttpServlet {
 
         List<ActivityRemark> arList = as.getRemarkListByAid(activityId);
 
-        PrintJson.printJsonObj(response,arList);
+        PrintJson.printJsonObj(response, arList);
 
     }
 
@@ -116,8 +149,8 @@ public class ActivityController extends HttpServlet {
         String id = request.getParameter("id");
         ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
         Activity a = as.detail(id);
-        request.setAttribute("a",a);
-        request.getRequestDispatcher("/workbench/activity/detail.jsp").forward(request,response);
+        request.setAttribute("a", a);
+        request.getRequestDispatcher("/workbench/activity/detail.jsp").forward(request, response);
     }
 
     private void update(HttpServletRequest request, HttpServletResponse response) {
@@ -161,9 +194,9 @@ public class ActivityController extends HttpServlet {
             uList
             a
          */
-         Map<String ,Object> map = as.getUserListAndActivity(id);
+        Map<String, Object> map = as.getUserListAndActivity(id);
 
-         PrintJson.printJsonObj(response,map);
+        PrintJson.printJsonObj(response, map);
 
     }
 
@@ -175,7 +208,7 @@ public class ActivityController extends HttpServlet {
 
         boolean flag = as.delete(ids);
 
-        PrintJson.printJsonFlag(response,flag);
+        PrintJson.printJsonFlag(response, flag);
 
     }
 
