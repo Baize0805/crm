@@ -21,6 +21,12 @@
         <url-pattern>*.do</url-pattern>
         <url-pattern>*.jsp</url-pattern>
     </filter-mapping>
+    
+    <!--声明监听器对象-->
+    <listener>
+        <listener-class>com.baize.crm.web.listener.SysInitListener</listener-class>
+    </listener>
+    
 
     <!--用户控制器-->
     <servlet>
