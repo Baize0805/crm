@@ -2,6 +2,7 @@ package com.baize.crm.workbench.service.impl;
 
 import com.baize.crm.utils.SqlSessionUtil;
 import com.baize.crm.workbench.dao.ClueDao;
+import com.baize.crm.workbench.domain.Clue;
 import com.baize.crm.workbench.service.ClueService;
 
 /**
@@ -11,4 +12,15 @@ import com.baize.crm.workbench.service.ClueService;
  */
 public class ClueServiceImpl implements ClueService {
     private ClueDao clueDao = SqlSessionUtil.getSqlSession().getMapper(ClueDao.class);
+
+    @Override
+    public boolean save(Clue c) {
+        boolean flag = true;
+        int count = clueDao.save(c);
+        if (count != 1) {
+            flag = false;
+        }
+
+        return flag;
+    }
 }
