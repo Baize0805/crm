@@ -4,7 +4,26 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.baize.crm.workbench.dao.ClueRemarkDao">
-	
+
+    <delete id="deleteByAids">
+        delete from tbl_clue_remark
+
+        where clueId in
+
+        <foreach collection="array" item="cid" open="(" close=")" separator=",">
+            #{cid}
+        </foreach>
+    </delete>
+
+	<select id="getCountByAids" resultType="int">
+        select count(*) from tbl_clue_remark
+
+        where clueId in
+
+        <foreach collection="array" item="cid" open="(" close=")" separator=",">
+            #{cid}
+        </foreach>
+    </select>
   	
 </mapper>
 

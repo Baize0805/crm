@@ -98,7 +98,7 @@
                         if (data.success) {
 
                             //刷新列表
-
+                            pageList(1,$("#cluePage").bs_pagination('getOption', 'rowsPerPage'));
 
                             //清空模态窗口中添加操作的数据
                             $("#clueAddForm")[0].reset();
@@ -119,11 +119,95 @@
             //页面加载完毕后触发一个方法
             pageList(1, 2);
 
+            //为查询按钮绑定点击事件触发pageList()函数
+            $("#searchBtn").click(function (){
+                // alert(123);
+                $("#hidden-fullname").val($.trim($("#search-fullname").val()));
+                // alert($.trim($("#search-fullname").val()));
+                $("#hidden-company").val($.trim($("#search-company").val()));
+                $("#hidden-phone").val($.trim($("#search-phone").val()));
+                $("#hidden-mphone").val($.trim($("#search-mphone").val()));
+                $("#hidden-source").val($.trim($("#search-source").val()));
+                $("#hidden-owner").val($.trim($("#search-owner").val()));
+                $("#hidden-state").val($.trim($("#search-state").val()));
+
+                pageList(1,2);
+            })
+
+            //为全选复选框绑定事件，触发全选操作
+            $("#qx").click(function () {
+                $("input[name=xz]").prop("checked", this.checked);
+            })
+
+            $("#clueBody").on("click", $("input[name=xz]"), function () {
+                $("#qx").prop("checked", $("input[name=xz]").length == $("input[name=xz]:checked").length);
+            })
+
+
+
+            //为删除按钮绑定事件，执行市场活动删除操作
+            $("#deleteBtn").click(function (){
+                // alert("123");
+                //找到复选框中所有选中的复选框的jquery对象
+                var $xz = $("input[name=xz]:checked");
+                if ($xz.length==0){
+                    alert("请选择需要删除的记录");
+                }else {
+
+                    if (confirm("您确定删除吗？")){
+                        // alert("123");
+                        //拼接参数
+                        var param ="";
+                        //将$xz中的每一个dom对象遍历出来，取其vlue值
+                        for (var i=0;i<$xz.length;i++){
+                            param += "id="+$($xz[i]).val();
+                            if (i<$xz.length-1){
+                                param += "&";
+                            }
+                        }
+                        // alert(param);
+
+                        $.ajax({
+                            url:"workbench/clue/delete.do",
+                            data:param,
+                            type:"post",
+                            dataType:"json",
+                            success:function (data){
+                                /*
+                                    data
+                                        {"success":true/false}
+                                 */
+                                if (data.success){
+                                    //删除成功后
+                                    pageList(1,$("#cluePage").bs_pagination('getOption', 'rowsPerPage'));
+
+                                }else {
+                                    alert("删除失败");
+                                }
+                            }
+                        })
+                    }
+                }
+            })
+
+
+
         });
 
 
         function pageList(pageNo, pageSize) {
             $("#qx").prop("checked", false);
+
+
+            $("#search-fullname").val($.trim($("#hidden-fullname").val()));
+            $("#search-company").val($.trim($("#hidden-company").val()));
+            $("#search-phone").val($.trim($("#hidden-phone").val()));
+            $("#search-mphone").val($.trim($("#hidden-mphone").val()));
+            $("#search-source").val($.trim($("#hidden-source").val()));
+            $("#search-owner").val($.trim($("#hidden-owner").val()));
+            $("#search-state").val($.trim($("#hidden-state").val()));
+
+
 
             $.ajax({
                 url: "workbench/clue/pageList.do",
@@ -190,6 +274,16 @@
     </script>
 </head>
 <body>
+
+
+<input type="hidden" id="hidden-fullname"/>
+<input type="hidden" id="hidden-company"/>
+<input type="hidden" id="hidden-phone"/>
+<input type="hidden" id="hidden-mphone"/>
+<input type="hidden" id="hidden-source"/>
+<input type="hidden" id="hidden-owner"/>
+<input type="hidden" id="hidden-state"/>
+
 
 <!-- 创建线索的模态窗口 -->
 <div class="modal fade" id="createClueModal" role="dialog">
@@ -501,6 +595,7 @@
     </div>
 </div>
 
+
 <div style="position: relative; top: -20px; left: 0px; width: 100%; height: 100%;">
 
     <div style="width: 100%; position: absolute;top: 5px; left: 10px;">
@@ -570,7 +665,7 @@
                     </div>
                 </div>
 
-                <button type="submit" id="searchBtn" class="btn btn-default">查询</button>
+                <button type="button" id="searchBtn" class="btn btn-default">查询</button>
 
             </form>
         </div>
@@ -583,7 +678,7 @@
                 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editClueModal"><span
                         class="glyphicon glyphicon-pencil"></span> 修改
                 </button>
-                <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
+                <button type="button" class="btn btn-danger" id="deleteBtn"><span class="glyphicon glyphicon-minus"></span> 删除</button>
             </div>
 
 
