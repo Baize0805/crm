@@ -39,7 +39,76 @@ public class ClueController extends HttpServlet {
             pageList(request, response);
         }else if ("/workbench/clue/delete.do".equals(path)) {
             delete(request, response);
+        }else if ("/workbench/clue/getUserListAndClue.do".equals(path)) {
+            getUserListAndClue(request, response);
+        }else if ("/workbench/clue/update.do".equals(path)) {
+            update(request, response);
         }
+    }
+
+    private void update(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("更新线索");
+        String id = request.getParameter("id");
+        String fullname = request.getParameter("fullname");
+        String appellation = request.getParameter("appellation");
+        String owner = request.getParameter("owner");
+        String company = request.getParameter("company");
+        String job = request.getParameter("job");
+        String email = request.getParameter("email");
+        String phone = request.getParameter("phone");
+        String website = request.getParameter("website");
+        String mphone = request.getParameter("mphone");
+        String state = request.getParameter("state");
+        String source = request.getParameter("source");
+        //创建时间，当前的系统时间
+        String editTime = DateTimeUtil.getSysTime();
+        //创建人，当前登录的用户
+        String editBy = ((User) request.getSession().getAttribute("user")).getName();
+        String description = request.getParameter("description");
+        String contactSummary = request.getParameter("contactSummary");
+        String nextContactTime = request.getParameter("nextContactTime");
+        String address = request.getParameter("address");
+
+        Clue c = new Clue();
+        c.setWebsite(website);
+        c.setState(state);
+        c.setSource(source);
+        c.setPhone(phone);
+        c.setOwner(owner);
+        c.setNextContactTime(nextContactTime);
+        c.setMphone(mphone);
+        c.setJob(job);
+        c.setId(id);
+        c.setFullname(fullname);
+        c.setEmail(email);
+        c.setEditTime(editTime);
+        c.setEditBy(editBy);
+        c.setDescription(description);
+        c.setContactSummary(contactSummary);
+        c.setCompany(company);
+        c.setAppellation(appellation);
+        c.setAddress(address);
+
+        ClueService cs = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+
+        boolean flag = cs.update(c);
+
+        PrintJson.printJsonFlag(response,flag);
+
+
+    }
+
+    private void getUserListAndClue(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("查询线索单条记录");
+        String id = request.getParameter("id");
+        ClueService cs = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+
+        Map<String,Object> map = cs.getUserListAndClue(id);
+
+        PrintJson.printJsonObj(response,map);
+
+
+
     }
 
     private void delete(HttpServletRequest request, HttpServletResponse response) {

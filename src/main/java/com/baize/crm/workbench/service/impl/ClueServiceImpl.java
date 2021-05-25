@@ -1,5 +1,7 @@
 package com.baize.crm.workbench.service.impl;
 
+import com.baize.crm.settings.dao.UserDao;
+import com.baize.crm.settings.domain.User;
 import com.baize.crm.utils.SqlSessionUtil;
 import com.baize.crm.vo.PaginationVO;
 import com.baize.crm.workbench.dao.ClueDao;
@@ -7,6 +9,7 @@ import com.baize.crm.workbench.dao.ClueRemarkDao;
 import com.baize.crm.workbench.domain.Clue;
 import com.baize.crm.workbench.service.ClueService;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +21,7 @@ import java.util.Map;
 public class ClueServiceImpl implements ClueService {
     private ClueDao clueDao = SqlSessionUtil.getSqlSession().getMapper(ClueDao.class);
     private ClueRemarkDao clueRemarkDao = SqlSessionUtil.getSqlSession().getMapper(ClueRemarkDao.class);
+    private UserDao userDao = SqlSessionUtil.getSqlSession().getMapper(UserDao.class);
 
     @Override
     public boolean save(Clue c) {
@@ -57,6 +61,34 @@ public class ClueServiceImpl implements ClueService {
             flag = false;
         }
 
+
+        return flag;
+    }
+
+    @Override
+    public Map<String, Object> getUserListAndClue(String id) {
+        //取uList
+        List<User> uList = userDao.getUserList();
+
+        //取c
+        Clue c = clueDao.getById(id);
+
+        //将uList和a打包到map中
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("uList", uList);
+        map.put("c", c);
+
+        return map;
+    }
+
+    @Override
+    public boolean update(Clue c) {
+        boolean flag = true;
+
+        int count = clueDao.update(c);
+        if (count != 1) {
+            flag = false;
+        }
 
         return flag;
     }

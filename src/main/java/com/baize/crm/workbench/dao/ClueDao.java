@@ -15,4 +15,8 @@ public interface ClueDao {
     List<Clue> getActivityListByCondition(Map<String, Object> map);
 
     int delete(String[] ids);
+
+    Clue getById(String id);
+
+    int update(Clue c);
 }

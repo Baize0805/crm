@@ -16,4 +16,8 @@ public interface ClueService {
     PaginationVO pageList(Map<String, Object> map);
 
     boolean delete(String[] ids);
+
+    Map<String, Object> getUserListAndClue(String id);
+
+    boolean update(Clue c);
 }
