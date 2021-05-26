@@ -20,4 +20,6 @@ public interface ClueService {
     Map<String, Object> getUserListAndClue(String id);
 
     boolean update(Clue c);
+
+    Clue detail(String id);
 }
