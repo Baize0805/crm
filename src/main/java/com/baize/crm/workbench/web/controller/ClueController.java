@@ -8,8 +8,11 @@ import com.baize.crm.utils.PrintJson;
 import com.baize.crm.utils.ServiceFactory;
 import com.baize.crm.utils.UUIDUtil;
 import com.baize.crm.vo.PaginationVO;
+import com.baize.crm.workbench.domain.Activity;
 import com.baize.crm.workbench.domain.Clue;
+import com.baize.crm.workbench.service.ActivityService;
 import com.baize.crm.workbench.service.ClueService;
+import com.baize.crm.workbench.service.impl.ActivityServiceImpl;
 import com.baize.crm.workbench.service.impl.ClueServiceImpl;
 
 import javax.servlet.ServletException;
@@ -45,7 +48,32 @@ public class ClueController extends HttpServlet {
             update(request, response);
         }else if ("/workbench/clue/detail.do".equals(path)) {
             detail(request, response);
+        }else if ("/workbench/clue/getActivityListByClueId.do".equals(path)) {
+            getActivityListByClueId(request, response);
+        }else if ("/workbench/clue/unbund.do".equals(path)) {
+            unbund(request, response);
         }
+    }
+
+    private void unbund(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("执行解除关联操作");
+        String id = request.getParameter("id");
+        ClueService cs = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+
+        boolean flag = cs.unbund(id);
+        PrintJson.printJsonFlag(response,flag);
+    }
+
+    private void getActivityListByClueId(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("根据线索id来查询关联的市场活动列表");
+        String clueId = request.getParameter("clueId");
+
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+
+        List<Activity> aList = as.getActivityListByClueId(clueId);
+
+        PrintJson.printJsonObj(response,aList);
+
     }
 
     private void detail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -22,4 +22,6 @@ public interface ClueService {
     boolean update(Clue c);
 
     Clue detail(String id);
+
+    boolean unbund(String id);
 }
