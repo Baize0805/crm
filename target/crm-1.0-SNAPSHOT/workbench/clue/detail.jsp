@@ -60,37 +60,94 @@
             //关联市场活动的模态窗口中的搜索绑定时间，触发回车事件
             $("#aname").keydown(function (event) {
                 if (event.keyCode == 13) {
-                    // alert(123);
-                    $.ajax({
-                        url: "workbench/clue/getActivityListByNameAndNotByClueId.do",
-                        data: {
-                            "aname": $.trim($("#aname").val()),
-                            "clueId": "${c.id}"
-                        },
-                        type: "get",
-                        dataType: "json",
-                        success: function (data) {
-                            var html = "";
-
-                            $.each(data, function (i, n) {
-                                html += '<tr>';
-                                html += '<td><input type="checkbox" name="xz" value="'+n.id+'"/></td>';
-                                html += '<td>'+n.name+'</td>';
-                                html += '<td>'+n.startDate+'</td>';
-                                html += '<td>'+n.endDate+'</td>';
-                                html += '<td>'+n.owner+'</td>';
-                                html += '</tr>';
-                            })
-							$("#activitySearchBody").html(html);
-
-                        }
-                    })
-
+                    upAssociation();
                     return false;
                 }
             })
 
+            //为全选复选框绑定事件，触发全选操作
+            $("#qx").click(function () {
+                $("input[name=xz]").prop("checked", this.checked);
+            })
+
+            $("#activitySearchBody").on("click", $("input[name=xz]"), function () {
+                $("#qx").prop("checked", $("input[name=xz]").length == $("input[name=xz]:checked").length);
+            })
+
+            //为关联按钮绑定点击事件
+            $("#bundBtn").click(function () {
+                // alert(1232);
+                var $xz = $("input[name=xz]:checked");
+
+                if ($xz.length == 0) {
+                    alert("请选择需要关联的市场活动");
+                } else {
+                    var param = "cid=${c.id}&";
+
+                    for (var i = 0; i < $xz.length; i++) {
+                        param += "aid=" + $($xz[i]).val();
+                        if (i<$xz.length-1){
+                            param +="&";
+                        }
+                    }
+                }
+                // alert(param);
+
+                $.ajax({
+                    url:"workbench/clue/bund.do",
+                    data:param,
+                    type:"post",
+                    dataType:"json",
+                    success:function (data){
+                        if (data.success){
+                            showActivityList();
+                            //清空搜索文本框，
+                            $("#aname").val("");
+                            // upAssociation();
+                            $("#activitySearchBody").html("");
+                            $("#bundModal").modal("hide");
+                        }else {
+                            alert("添加关联失败");
+                        }
+                    }
+                })
+
+            })
+
+
         });
+
+        function upAssociation(){
+            $("#qx").prop("checked",false);
+            $("input[name=xz]").prop("checked", false);
+            // alert(123);
+            $.ajax({
+                url: "workbench/clue/getActivityListByNameAndNotByClueId.do",
+                data: {
+                    "aname": $.trim($("#aname").val()),
+                    "clueId": "${c.id}"
+                },
+                type: "get",
+                dataType: "json",
+                success: function (data) {
+                    var html = "";
+
+                    $.each(data, function (i, n) {
+                        html += '<tr>';
+                        html += '<td><input type="checkbox" name="xz" value="' + n.id + '"/></td>';
+                        html += '<td>' + n.name + '</td>';
+                        html += '<td>' + n.startDate + '</td>';
+                        html += '<td>' + n.endDate + '</td>';
+                        html += '<td>' + n.owner + '</td>';
+                        html += '</tr>';
+                    })
+                    $("#activitySearchBody").html(html);
+
+                }
+            })
+
+
+        }
 
         function showActivityList() {
             $.ajax({
@@ -170,7 +227,7 @@
                 <table id="activityTable" class="table table-hover" style="width: 900px; position: relative;top: 10px;">
                     <thead>
                     <tr style="color: #B3B3B3;">
-                        <td><input type="checkbox"/></td>
+                        <td><input type="checkbox" id="qx"/></td>
                         <td>名称</td>
                         <td>开始日期</td>
                         <td>结束日期</td>
@@ -198,7 +255,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">关联</button>
+                <button type="button" class="btn btn-primary" id="bundBtn">关联</button>
             </div>
         </div>
     </div>

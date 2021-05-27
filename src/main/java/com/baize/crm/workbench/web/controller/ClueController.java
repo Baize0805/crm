@@ -38,23 +38,39 @@ public class ClueController extends HttpServlet {
             getUserList(request, response);
         } else if ("/workbench/clue/save.do".equals(path)) {
             save(request, response);
-        }else if ("/workbench/clue/pageList.do".equals(path)) {
+        } else if ("/workbench/clue/pageList.do".equals(path)) {
             pageList(request, response);
-        }else if ("/workbench/clue/delete.do".equals(path)) {
+        } else if ("/workbench/clue/delete.do".equals(path)) {
             delete(request, response);
-        }else if ("/workbench/clue/getUserListAndClue.do".equals(path)) {
+        } else if ("/workbench/clue/getUserListAndClue.do".equals(path)) {
             getUserListAndClue(request, response);
-        }else if ("/workbench/clue/update.do".equals(path)) {
+        } else if ("/workbench/clue/update.do".equals(path)) {
             update(request, response);
-        }else if ("/workbench/clue/detail.do".equals(path)) {
+        } else if ("/workbench/clue/detail.do".equals(path)) {
             detail(request, response);
-        }else if ("/workbench/clue/getActivityListByClueId.do".equals(path)) {
+        } else if ("/workbench/clue/getActivityListByClueId.do".equals(path)) {
             getActivityListByClueId(request, response);
-        }else if ("/workbench/clue/unbund.do".equals(path)) {
+        } else if ("/workbench/clue/unbund.do".equals(path)) {
             unbund(request, response);
-        }else if ("/workbench/clue/getActivityListByNameAndNotByClueId.do".equals(path)) {
+        } else if ("/workbench/clue/getActivityListByNameAndNotByClueId.do".equals(path)) {
             getActivityListByNameAndNotByClueId(request, response);
+        } else if ("/workbench/clue/bund.do".equals(path)) {
+            bund(request, response);
         }
+    }
+
+    private void bund(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("执行关联市场活动的操作");
+        String cid = request.getParameter("cid");
+        String[] aids = request.getParameterValues("aid");
+
+        ClueService cs = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+
+        boolean flag = cs.bund(cid,aids);
+
+        PrintJson.printJsonFlag(response,flag);
+
+
     }
 
     private void getActivityListByNameAndNotByClueId(HttpServletRequest request, HttpServletResponse response) {
@@ -63,14 +79,14 @@ public class ClueController extends HttpServlet {
         String aname = request.getParameter("aname");
         String clueId = request.getParameter("clueId");
 
-        Map<String,String> map = new HashMap<String, String>();
-        map.put("aname",aname);
-        map.put("clueId",clueId);
+        Map<String, String> map = new HashMap<String, String>();
+        map.put("aname", aname);
+        map.put("clueId", clueId);
 
         ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
         List<Activity> aList = as.getActivityListByNameAndNotByClueId(map);
 
-        PrintJson.printJsonObj(response,aList);
+        PrintJson.printJsonObj(response, aList);
 
 
     }
@@ -81,7 +97,7 @@ public class ClueController extends HttpServlet {
         ClueService cs = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
 
         boolean flag = cs.unbund(id);
-        PrintJson.printJsonFlag(response,flag);
+        PrintJson.printJsonFlag(response, flag);
     }
 
     private void getActivityListByClueId(HttpServletRequest request, HttpServletResponse response) {
@@ -92,7 +108,7 @@ public class ClueController extends HttpServlet {
 
         List<Activity> aList = as.getActivityListByClueId(clueId);
 
-        PrintJson.printJsonObj(response,aList);
+        PrintJson.printJsonObj(response, aList);
 
     }
 
@@ -104,8 +120,8 @@ public class ClueController extends HttpServlet {
         ClueService cs = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
 
         Clue c = cs.detail(id);
-        request.setAttribute("c",c);
-        request.getRequestDispatcher("/workbench/clue/detail.jsp").forward(request,response);
+        request.setAttribute("c", c);
+        request.getRequestDispatcher("/workbench/clue/detail.jsp").forward(request, response);
     }
 
     private void update(HttpServletRequest request, HttpServletResponse response) {
@@ -155,7 +171,7 @@ public class ClueController extends HttpServlet {
 
         boolean flag = cs.update(c);
 
-        PrintJson.printJsonFlag(response,flag);
+        PrintJson.printJsonFlag(response, flag);
 
 
     }
@@ -165,10 +181,9 @@ public class ClueController extends HttpServlet {
         String id = request.getParameter("id");
         ClueService cs = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
 
-        Map<String,Object> map = cs.getUserListAndClue(id);
+        Map<String, Object> map = cs.getUserListAndClue(id);
 
-        PrintJson.printJsonObj(response,map);
-
+        PrintJson.printJsonObj(response, map);
 
 
     }
@@ -203,22 +218,22 @@ public class ClueController extends HttpServlet {
         //计算略过的记录数
         int skipCount = (pageNo - 1) * pageSize;
 
-        Map<String,Object> map = new HashMap<String, Object>();
-        map.put("fullname",fullname);
-        map.put("owner",owner);
-        map.put("company",company);
-        map.put("phone",phone);
-        map.put("mphone",mphone);
-        map.put("state",state);
-        map.put("source",source);
-        map.put("skipCount",skipCount);
-        map.put("pageSize",pageSize);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("fullname", fullname);
+        map.put("owner", owner);
+        map.put("company", company);
+        map.put("phone", phone);
+        map.put("mphone", mphone);
+        map.put("state", state);
+        map.put("source", source);
+        map.put("skipCount", skipCount);
+        map.put("pageSize", pageSize);
 
         ClueService cs = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
 
         PaginationVO vo = cs.pageList(map);
 
-        PrintJson.printJsonObj(response,vo);
+        PrintJson.printJsonObj(response, vo);
 
     }
 
@@ -270,7 +285,7 @@ public class ClueController extends HttpServlet {
 
         boolean flag = cs.save(c);
 
-        PrintJson.printJsonFlag(response,flag);
+        PrintJson.printJsonFlag(response, flag);
 
     }
 

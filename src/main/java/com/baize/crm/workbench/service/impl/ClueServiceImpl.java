@@ -3,11 +3,13 @@ package com.baize.crm.workbench.service.impl;
 import com.baize.crm.settings.dao.UserDao;
 import com.baize.crm.settings.domain.User;
 import com.baize.crm.utils.SqlSessionUtil;
+import com.baize.crm.utils.UUIDUtil;
 import com.baize.crm.vo.PaginationVO;
 import com.baize.crm.workbench.dao.ClueActivityRelationDao;
 import com.baize.crm.workbench.dao.ClueDao;
 import com.baize.crm.workbench.dao.ClueRemarkDao;
 import com.baize.crm.workbench.domain.Clue;
+import com.baize.crm.workbench.domain.ClueActivityRelation;
 import com.baize.crm.workbench.service.ClueService;
 
 import java.util.HashMap;
@@ -109,6 +111,27 @@ public class ClueServiceImpl implements ClueService {
         if (count!=1){
             flag = false;
         }
+
+        return flag;
+    }
+
+    @Override
+    public boolean bund(String cid, String[] aids) {
+        boolean flag = true;
+
+        for (String aid:aids){
+            ClueActivityRelation car = new ClueActivityRelation();
+            car.setId(UUIDUtil.getUUID());
+            car.setClueId(cid);
+            car.setActivityId(aid);
+
+            int count = clueActivityRelationDao.bund(car);
+            if (count != 1){
+                flag = false;
+            }
+
+        }
+
 
         return flag;
     }
