@@ -56,7 +56,21 @@ public class ClueController extends HttpServlet {
             getActivityListByNameAndNotByClueId(request, response);
         } else if ("/workbench/clue/bund.do".equals(path)) {
             bund(request, response);
+        }else if ("/workbench/clue/getActivityListByName.do".equals(path)) {
+            getActivityListByName(request, response);
         }
+    }
+
+    private void getActivityListByName(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("给搜索执行根据name查询市场活动的操作");
+        String anamae = request.getParameter("aname");
+
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImpl());
+
+        List<Activity> aList = as.getActivityListByName(anamae);
+
+        PrintJson.printJsonObj(response,aList);
+
     }
 
     private void bund(HttpServletRequest request, HttpServletResponse response) {
