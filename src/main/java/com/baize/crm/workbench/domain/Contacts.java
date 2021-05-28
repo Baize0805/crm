@@ -129,8 +129,28 @@ public class Contacts {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	
-	
 
-	
+	@Override
+	public String toString() {
+		return "Contacts{" +
+				"id='" + id + '\'' +
+				", owner='" + owner + '\'' +
+				", source='" + source + '\'' +
+				", customerId='" + customerId + '\'' +
+				", fullname='" + fullname + '\'' +
+				", appellation='" + appellation + '\'' +
+				", email='" + email + '\'' +
+				", mphone='" + mphone + '\'' +
+				", job='" + job + '\'' +
+				", birth='" + birth + '\'' +
+				", createBy='" + createBy + '\'' +
+				", createTime='" + createTime + '\'' +
+				", editBy='" + editBy + '\'' +
+				", editTime='" + editTime + '\'' +
+				", description='" + description + '\'' +
+				", contactSummary='" + contactSummary + '\'' +
+				", nextContactTime='" + nextContactTime + '\'' +
+				", address='" + address + '\'' +
+				'}';
+	}
 }

@@ -63,7 +63,7 @@
                             $.each(data, function (i, n) {
                                 html += '<tr>';
                                 html += '<td><input type="radio"  name="xz" value="' + n.id + '"/></td>';
-                                html += '<td>' + n.name + '</td>';
+                                html += '<td id="'+n.id+'">' + n.name + '</td>';
                                 html += '<td>' + n.startDate + '</td>';
                                 html += '<td>' + n.endDate + '</td>';
                                 html += '<td>' + n.owner + '</td>';
@@ -78,6 +78,37 @@
                 }
             })
 
+            //为提交市场活动的按钮绑定事件，填充市场活动源
+            $("#submitActivityBtn").click(function (){
+                //取得id
+                var $xz = $("input[name=xz]:checked");
+                var id = $xz.val();
+
+                //取得选择市场活动的名称
+                var name= $("#"+id).html();
+                /*alert(id);
+                alert(name);*/
+
+                //将两个值赋值给表单
+                $("#activityId").val(id);
+                $("#activityName").val(name);
+
+                $("#searchActivityModal").modal("hide");
+            })
+
+            //为转换按钮绑定事件
+            $("#convertBtn").click(function (){
+                if($("#isCreateTransaction").prop("checked")){
+                    // alert("需要创建交易")
+
+                    //提交表单
+                    $("#tranForm").submit();
+
+                }else {
+                    // alert("不需要创建交易");
+                    window.location.href = "workbench/clue/convert.do?clueId=${param.id}";
+                }
+            })
 
         });
     </script>
@@ -134,6 +165,10 @@
                     </tbody>
                 </table>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="submitActivityBtn">提交</button>
+            </div>
         </div>
     </div>
 </div>
@@ -154,22 +189,24 @@
 <div id="create-transaction2"
      style="position: relative; left: 40px; top: 20px; width: 80%; background-color: #F7F7F7; display: none;">
 
-    <form>
+    <form id="tranForm" action="workbench/clue/convert.do" method="post">
+        <input type="hidden" value="a" name="flag"/>
+        <input type="hidden" value="${param.id}" name="clueId"/>
         <div class="form-group" style="width: 400px; position: relative; left: 20px;">
             <label for="amountOfMoney">金额</label>
-            <input type="text" class="form-control" id="amountOfMoney">
+            <input type="text" class="form-control" id="amountOfMoney" name="money">
         </div>
         <div class="form-group" style="width: 400px;position: relative; left: 20px;">
             <label for="tradeName">交易名称</label>
-            <input type="text" class="form-control" id="tradeName" value="动力节点-">
+            <input type="text" class="form-control" id="tradeName" name="name">
         </div>
         <div class="form-group" style="width: 400px;position: relative; left: 20px;">
             <label for="expectedClosingDate">预计成交日期</label>
-            <input type="text" class="form-control time" id="expectedClosingDate">
+            <input type="text" class="form-control time" id="expectedClosingDate" name="expectedDate">
         </div>
         <div class="form-group" style="width: 400px;position: relative; left: 20px;">
             <label for="stage">阶段</label>
-            <select id="stage" class="form-control">
+            <select id="stage" class="form-control" name="stage">
                 <option></option>
                 <c:forEach items="${stageList}" var="s">
                     <option value="${s.value}">${s.text}</option>
@@ -180,7 +217,8 @@
             <label for="activity">市场活动源&nbsp;&nbsp;<a href="javascript:void(0);" id="openSearchModalBtn"
                                                       style="text-decoration: none;"><span
                     class="glyphicon glyphicon-search"></span></a></label>
-            <input type="text" class="form-control" id="activity" placeholder="点击上面搜索" readonly>
+            <input type="text" class="form-control" id="activityName" placeholder="点击上面搜索" readonly>
+            <input  type="hidden" id="activityId" name="activityId"/>
         </div>
     </form>
 
@@ -191,7 +229,7 @@
     <b>${param.owner}</b>
 </div>
 <div id="operation" style="position: relative; left: 40px; height: 35px; top: 100px;">
-    <input class="btn btn-primary" type="button" value="转换">
+    <input class="btn btn-primary" type="button" value="转换" id="convertBtn">
     &nbsp;&nbsp;&nbsp;&nbsp;
     <input class="btn btn-default" type="button" value="取消">
 </div>

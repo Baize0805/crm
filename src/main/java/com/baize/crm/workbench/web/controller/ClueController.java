@@ -10,6 +10,7 @@ import com.baize.crm.utils.UUIDUtil;
 import com.baize.crm.vo.PaginationVO;
 import com.baize.crm.workbench.domain.Activity;
 import com.baize.crm.workbench.domain.Clue;
+import com.baize.crm.workbench.domain.Tran;
 import com.baize.crm.workbench.service.ActivityService;
 import com.baize.crm.workbench.service.ClueService;
 import com.baize.crm.workbench.service.impl.ActivityServiceImpl;
@@ -56,9 +57,57 @@ public class ClueController extends HttpServlet {
             getActivityListByNameAndNotByClueId(request, response);
         } else if ("/workbench/clue/bund.do".equals(path)) {
             bund(request, response);
-        }else if ("/workbench/clue/getActivityListByName.do".equals(path)) {
+        } else if ("/workbench/clue/getActivityListByName.do".equals(path)) {
             getActivityListByName(request, response);
+        } else if ("/workbench/clue/convert.do".equals(path)) {
+            convert(request, response);
         }
+    }
+
+    private void convert(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        System.out.println("执行线索转换操作");
+
+        String clueId = request.getParameter("clueId");
+
+        //接收是否需要创建交易的标识
+        String flag1 = request.getParameter("flag");
+
+        Tran t = null;
+
+        String createBy = ((User) request.getSession().getAttribute("user")).getName();
+        if ("a".equals(flag1)) {
+            t = new Tran();
+            //接收表单中的参数
+            String money = request.getParameter("money");
+            String name = request.getParameter("name");
+            String expectedDate = request.getParameter("expectedDate");
+            String stage = request.getParameter("stage");
+            String activityId = request.getParameter("activityId");
+            String id = UUIDUtil.getUUID();
+            //创建时间，当前的系统时间
+            String createTime = DateTimeUtil.getSysTime();
+            //创建人，当前登录的用户
+
+
+            t.setId(id);
+            t.setCreateBy(createBy);
+            t.setCreateTime(createTime);
+            t.setMoney(money);
+            t.setName(name);
+            t.setExpectedDate(expectedDate);
+            t.setActivityId(activityId);
+            t.setStage(stage);
+        }
+
+        ClueService cs = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+
+        boolean flag = cs.convert(clueId,t,createBy);
+
+        if (flag){
+            response.sendRedirect(request.getContextPath()+"/workbench/clue/index.jsp");
+        }
+
+
     }
 
     private void getActivityListByName(HttpServletRequest request, HttpServletResponse response) {
@@ -69,7 +118,7 @@ public class ClueController extends HttpServlet {
 
         List<Activity> aList = as.getActivityListByName(anamae);
 
-        PrintJson.printJsonObj(response,aList);
+        PrintJson.printJsonObj(response, aList);
 
     }
 
@@ -80,9 +129,9 @@ public class ClueController extends HttpServlet {
 
         ClueService cs = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
 
-        boolean flag = cs.bund(cid,aids);
+        boolean flag = cs.bund(cid, aids);
 
-        PrintJson.printJsonFlag(response,flag);
+        PrintJson.printJsonFlag(response, flag);
 
 
     }

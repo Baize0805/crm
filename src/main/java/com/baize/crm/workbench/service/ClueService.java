@@ -2,6 +2,7 @@ package com.baize.crm.workbench.service;
 
 import com.baize.crm.vo.PaginationVO;
 import com.baize.crm.workbench.domain.Clue;
+import com.baize.crm.workbench.domain.Tran;
 
 import java.util.Map;
 
@@ -26,4 +27,7 @@ public interface ClueService {
     boolean unbund(String id);
 
     boolean bund(String cid, String[] aids);
+
+
+    boolean convert(String clueId, Tran t, String createBy);
 }

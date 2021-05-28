@@ -1,9 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.baize.crm.workbench.dao.ClueRemarkDao">
+
+    <delete id="delete">
+        delete from tbl_clue_remark where id=#{id}
+    </delete>
+
+    <select id="getListByClueId" resultType="ClueRemark">
+        select *
+        from tbl_clue_remark
+        where clueId = #{clueId}
+    </select>
 
     <delete id="deleteByAids">
         delete from tbl_clue_remark
@@ -15,7 +25,7 @@
         </foreach>
     </delete>
 
-	<select id="getCountByAids" resultType="int">
+    <select id="getCountByAids" resultType="int">
         select count(*) from tbl_clue_remark
 
         where clueId in
@@ -24,7 +34,7 @@
             #{cid}
         </foreach>
     </select>
-  	
+
 </mapper>
 
 
