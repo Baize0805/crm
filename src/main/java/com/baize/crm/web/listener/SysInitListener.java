@@ -8,9 +8,7 @@ import com.baize.crm.utils.ServiceFactory;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @Author baize
@@ -29,10 +27,27 @@ public class SysInitListener implements ServletContextListener {
         Map<String, List<DicValue>> map = ds.getAll();
         //将map解析为上下文域对象中保存的键值对
         Set<String> set = map.keySet();
-        for (String key : set){
-            application.setAttribute(key,map.get(key));
+        for (String key : set) {
+            application.setAttribute(key, map.get(key));
         }
         System.out.println("服务器缓存处理数据字典结束");
+
+
+        //--------------------------------------------
+
+        Map<String,String> pMap = new HashMap<String, String>();
+
+        ResourceBundle rb = ResourceBundle.getBundle("Stage2Possibility");
+
+        Enumeration<String> e = rb.getKeys();
+
+        while (e.hasMoreElements()){
+            String key = e.nextElement();
+            String value = rb.getString(key);
+            pMap.put(key,value);
+        }
+
+        application.setAttribute("pMap",pMap);
 
     }
 
