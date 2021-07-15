@@ -39,7 +39,7 @@
             });
 
 
-            window.open("workbench/main/index.jsp", "workareaFrame");
+            window.open("workbench/main/index.html", "workareaFrame");
 
         });
 
@@ -145,7 +145,7 @@
 <!-- 顶部 -->
 <div id="top" style="height: 50px; background-color: #3C3C3C; width: 100%;">
     <div style="position: absolute; top: 5px; left: 0px; font-size: 30px; font-weight: 400; color: white; font-family: 'times new roman'">
-        CRM &nbsp;<span style="font-size: 12px;">&copy;2017&nbsp;动力节点</span></div>
+        CRM &nbsp;<span style="font-size: 12px;">&copy;2021.6.1&nbsp;杰哥六一童心</span></div>
     <div style="position: absolute; top: 15px; right: 15px;">
         <ul>
             <li class="dropdown user-dropdown">
@@ -176,11 +176,11 @@
 
         <ul id="no1" class="nav nav-pills nav-stacked">
             <li class="liClass"><a href="workbench/main/index.html" target="workareaFrame"><span
-                    class="glyphicon glyphicon-home"></span> 工作台</a></li>
-            <li class="liClass"><a href="javascript:void(0);" target="workareaFrame"><span
-                    class="glyphicon glyphicon-tag"></span> 动态</a></li>
-            <li class="liClass"><a href="javascript:void(0);" target="workareaFrame"><span
-                    class="glyphicon glyphicon-time"></span> 审批</a></li>
+                    class="glyphicon glyphicon-home"></span> 六一</a></li>
+            <li class="liClass"><a href="workbench/jquerygraphics/index.html" target="workareaFrame"><span
+                    class="glyphicon glyphicon-tag"></span> 快乐</a></li>
+            <li class="liClass"><a href="workbench/funky-letters-animated/index.html" target="workareaFrame"><span
+                    class="glyphicon glyphicon-time"></span> 遗憾</a></li>
             <li class="liClass"><a href="javascript:void(0);" target="workareaFrame"><span
                     class="glyphicon glyphicon-user"></span> 客户公海</a></li>
             <li class="liClass"><a href="workbench/activity/index.jsp" target="workareaFrame"><span
